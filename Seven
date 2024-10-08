@@ -1,0 +1,28 @@
+%butterworth filter- bilinear transformation
+clc;clear all;close all;
+wp=0.2; %rad
+ws=0.3; %rad
+bwp=2*tan(wp/2);
+bws=2*tan(ws/2);
+[bNb,bwh]=buttord(bwp,bws,1,15,'s');
+[bl,al]=butter(bNb,bwh,'s');
+figure;
+sys=tf(bl,al)
+bode(sys);
+figure;
+[num1 den1]=bilinear(bl,al,1); % impinvar
+freqz(num1,den1);
+HZ=tf(num1,den1,1)
+%Testing the lpf
+ts=1/5000;
+n=0:499;
+%x=cos(2*pi*10*n*ts);
+%x=cos(2*pi*250*n*ts);
+%x=cos(0.08*pi*n)+cos(pi*n);
+x=cos(2*pi*250*n*ts)+cos(2*pi*10*n*ts);
+y=filter(num1,den1,x);
+figure;
+subplot(2,1,1);
+stem(x(400:499));
+subplot(2,1,2);
+stem(y(400:499));
