@@ -1,0 +1,42 @@
+% Chebyshev filter - impulse invariance
+clc; clear all; close all;
+
+ws = 0.6 * pi;  
+wp = 0.4 * pi;
+amax = 2;  
+amin = 6;
+
+[nb, wb] = cheb1ord(wp, ws, amax, amin, 's');
+[b, a] = cheby1(nb, amax, wb, 's');
+
+sys = tf(b, a);  
+bode(sys);  
+figure;
+
+[num1, den1] = impinvar(b, a, 1);
+freqz(num1, den1);
+
+HZ = tf(num1, den1, 1);
+figure;
+clc; clear all; close all;
+% CHEBYSHEV - Bilinear Transformation
+ws = 0.6 * pi;  
+wp = 0.4 * pi;  
+amax = 2;  
+amin = 6;
+
+bwp = 2 * tan(wp / 2);
+bws = 2 * tan(ws / 2);
+
+[nb, wb] = cheb1ord(bwp, bws, amax, amin, 's');
+[b, a] = cheby1(nb, amax, wb, 's');
+
+sys = tf(b, a);
+bode(sys);  
+figure;
+
+[num1, den1] = bilinear(b, a, 1);
+freqz(num1, den1);
+
+HZ = tf(num1, den1, 1);
+figure;
