@@ -1,0 +1,19 @@
+clc;
+clear all;
+close all;
+
+b = []; a = [1 -0.5];    % Stable IIR
+impz(b, a)
+figure(1);
+zplane(b, a);
+
+n = -10:10;
+x = cos(2 * pi * 0.1 * n);
+
+figure(2);
+y = filter(b, a, x);
+subplot(2,1,1); stem(n, x);
+subplot(2,1,2); stem(n, y);
+
+figure(3);
+freqz(b, a);
